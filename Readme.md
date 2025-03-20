@@ -17,10 +17,15 @@ Cardiovascular diseases (CVDs) are a leading cause of mortality worldwide. Early
 ✅ Complies with Medical Standards - Aligns with AAMI EC57, FDA & HIPAA regulations.
 
 ## 🏥 How It Works?
+
 1️⃣ Load ECG Data from the MIT-BIH Arrhythmia Database
+
 2️⃣ Preprocess Data: Noise removal, heartbeat segmentation, feature extraction
+
 3️⃣ Train AI Model: CNN extracts features, LSTM captures temporal dependencies
+
 4️⃣ Evaluate Performance: Accuracy, precision, recall, and AUC-ROC analysis
+
 5️⃣ Deploy the Model: Cloud API or embedded system for real-time ECG analysis
 
 
@@ -28,7 +33,8 @@ Cardiovascular diseases (CVDs) are a leading cause of mortality worldwide. Early
 
 1️⃣ Clone the Repository
 
-git clone https://github.com/your-username/Cardiovascular_Disease_Detection.git
+git clone https://github.com/akshaypatra/Cardiovascular_Disease_Detection.git
+
 cd Cardiovascular_Disease_Detection
 
 2️⃣ Install Dependencies
@@ -55,8 +61,11 @@ Annotations: Normal beats, Arrhythmia, Atrial Fibrillation
 ## 🛠 Technologies Used
 
 🔹 Python, TensorFlow, Keras - Deep Learning Model
+
 🔹 Scikit-learn, Pandas, NumPy - Data Processing & Preprocessing
+
 🔹 Matplotlib, Seaborn - Visualization
+
 🔹 WFDB Library - ECG Signal Handling
 
 
