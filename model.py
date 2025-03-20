@@ -9,28 +9,33 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder
 import wfdb
 import os
 
-# 🔹 Suppress TensorFlow Warnings
+
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
-# 🔹 Load & Preprocess ECG Dataset
+# Loading & Preprocessing ECG Dataset
+
 data_path = os.path.join(os.path.dirname(__file__), "mit-bih-arrhythmia-database", "100")
 record = wfdb.rdrecord(data_path)
 annotation = wfdb.rdann(data_path, 'atr')
 
-# Extract ECG signal & labels
+# Extracting ECG signal & labels
+
 ecg_signal = record.p_signal[:, 0]  
 labels = annotation.sample  
 
-# Normalize ECG signal
+# Normalizing ECG signal
+
 scaler = StandardScaler()
 ecg_signal = scaler.fit_transform(ecg_signal.reshape(-1, 1)).flatten()
 
-# Encode class labels
+# Encoding class labels
+
 label_encoder = LabelEncoder()
 labels = label_encoder.fit_transform(labels)
 
-# 🔹 Prepare Data for Training
-seq_length = 200  # Window size for ECG signal slices
+# Preparing Data for Training
+
+seq_length = 200  
 
 X, y = [], []
 for i in range(len(ecg_signal) - seq_length):
@@ -41,17 +46,16 @@ for i in range(len(ecg_signal) - seq_length):
 X = np.array(X)
 y = np.array(y)
 
-# 🔹 Ensure X and y have the same length
+
+
 assert len(X) == len(y), f"Mismatch: X has {len(X)} samples, but y has {len(y)} labels."
 
-# 🔹 Train-test split
+#  Train-test split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# Reshape for CNN-LSTM (samples, timesteps, features)
 X_train = X_train.reshape(-1, seq_length, 1)
 X_test = X_test.reshape(-1, seq_length, 1)
 
-# 🔹 Build the CNN-LSTM Model
+#  Building the CNN-LSTM Model
 model = Sequential([
     layers.Conv1D(filters=32, kernel_size=5, activation='relu', input_shape=(seq_length, 1)),
     layers.BatchNormalization(),
@@ -71,21 +75,23 @@ model = Sequential([
     layers.Dense(len(np.unique(y)), activation='softmax')  
 ])
 
-# Compile Model
+# Compiling Model
 model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
-# 🔹 Define Callbacks for Better Training
+#  Defining Callbacks for Better Training
 early_stopping = callbacks.EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
 reduce_lr = callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=3, min_lr=1e-6)
 
-# 🔹 Train the Model
+#  Training the Model
 history = model.fit(X_train, y_train, epochs=30, batch_size=32, validation_data=(X_test, y_test), callbacks=[early_stopping, reduce_lr])
 
-# 🔹 Evaluate the Model
+#  Evaluating the Model
+
 loss, accuracy = model.evaluate(X_test, y_test)
 print(f"Test Accuracy: {accuracy:.4f}")
 
-# 🔹 Visualize Model Performance
+#  Visualizing Model Performance
+
 plt.figure(figsize=(8, 5))
 plt.plot(history.history['accuracy'], label='Train Accuracy', color='blue')
 plt.plot(history.history['val_accuracy'], label='Validation Accuracy', color='red')
@@ -95,5 +101,6 @@ plt.legend()
 plt.title("CNN-LSTM ECG Classification Performance")
 plt.show()
 
-# 🔹 Save the Model
+#  Saving the Model
+
 model.save("ecg_cardiovascular_model_optimized.h5")

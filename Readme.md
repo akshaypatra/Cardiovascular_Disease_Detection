@@ -1,4 +1,4 @@
-### 🫀 AI-Powered Early Detection of Cardiovascular Diseases
+## 🫀 AI-Powered Early Detection of Cardiovascular Diseases
 This repository contains an AI-driven ECG classification model that detects cardiovascular abnormalities such as arrhythmia and atrial fibrillation using a hybrid CNN-LSTM deep learning approach.
 
 ## 📌 Project Overview
